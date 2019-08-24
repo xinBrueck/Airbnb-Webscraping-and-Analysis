@@ -42,7 +42,6 @@ I would like to one day become an Airbnb Host as a side job. This project is try
   element = driver.find_element_by_css_selector('div#amenities button')
   webdriver.ActionChains(driver).move_to_element(element).click(element).perform()
   ```
-  <br/>
 
   The scrapping of each individual element is wrapped in `try-except` block to handle listing variations
 

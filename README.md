@@ -19,7 +19,7 @@ I would like to one day become an Airbnb Host as a side job. This project is try
 - Step 2: Get the listing details for all 3000 Housing Listings<br/>
   (Script: 002_Get_Individual_Listing_Details.ipynb)
 
-  Below is a list of informations I scrapped for each listing:
+  Below is a list of informations scrapped for each listing:
   - Name
   - Location
   - Housing Type(Entire House/Private Room etc)
@@ -40,8 +40,11 @@ I would like to one day become an Airbnb Host as a side job. This project is try
 
   ```
   element = driver.find_element_by_css_selector('div#amenities button')
-  webdriver.ActionChains(driver).move_to_element(element).click(element).perform() ```
-   The scrapping of each individual element is wrapped in `try-except` block to handle listing variations
+  webdriver.ActionChains(driver).move_to_element(element).click(element).perform()
+  ```
+  <br/>
+
+  The scrapping of each individual element is wrapped in `try-except` block to handle listing variations
 
 - Below is scrapped results in `csv` format<br/>
 <br/><img src="./img/scrapped_raw_data1.png"><br/><br/>

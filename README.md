@@ -9,7 +9,7 @@ I would like to one day become an Airbnb Host as a side job. This project is try
 
 ## Main Process
 ### Web Scrapping using `BeautifulSoup`, `selenium`
-- Step 1: Get the URL for ~3000 Housing Listings in greater Seattle area<br/>
+- Step 1: Get the URL for **3000** Housing Listings in greater Seattle area<br/>
   (Script: 001_Get_Housing_Listing_URL.ipynb)
 
   Airbnb only return 17 pages per search, to scrape enough listings, I scrapped by price range from 50 to 200. Perform 1 search for each $5 bucket, and get the listings from all the pages returned by the search.

@@ -9,14 +9,14 @@ I would like to one day become an Airbnb Host as a side job. This project is try
 
 ## Main Process
 ### Web Scrapping using `BeautifulSoup`, `selenium`
-- Step 1: Get the URL for ~3000 Housing Listings in greater Seattle area
+- Step 1: Get the URL for ~3000 Housing Listings in greater Seattle area<br/>
   (Script: 001_Get_Housing_Listing_URL.ipynb)
 
   Airbnb only return 17 pages per search, to scrape enough listings, I scrapped by price range from 50 to 200. Perform 1 search for each $5 bucket, and get the listings from all the pages returned by the search.
 
   Note that due to the scrapping technique, this sample won't be a good representation of the whole housing listing population, but it should give us a reasonable look of housing listings in the price range selected.
 
-- Step 2: Get the listing details for all 3000 Housing Listings
+- Step 2: Get the listing details for all 3000 Housing Listings<br/>
   (Script: 002_Get_Individual_Listing_Details.ipynb)
 
   Below is a list of informations I scrapped for each listing:
@@ -35,17 +35,19 @@ I would like to one day become an Airbnb Host as a side job. This project is try
 
   To get available dates, I have looped through all the `dates td tag` for each `month table` in the `calendar div`, counted all the dates with `aria-label` not starts with `Not`
 
-  The full amenity list is implemented as pop-up **Modal**, I have used `selenium` to click the `Show all 18 amenities` button
-  `element = driver.find_element_by_css_selector('div#amenities button')
-   webdriver.ActionChains(driver).move_to_element(element).click(element).perform()`
+  The full amenity list is implemented as pop-up **Modal**, I have used `selenium` to click the `Show all 18 amenities` button<br/>
+  <br/>
 
+  ```
+  element = driver.find_element_by_css_selector('div#amenities button')
+  webdriver.ActionChains(driver).move_to_element(element).click(element).perform() ```
    The scrapping of each individual element is wrapped in `try-except` block to handle listing variations
 
 - Below is scrapped results in `csv` format<br/>
 <br/><img src="./img/scrapped_raw_data1.png"><br/><br/>
 <br/><img src="./img/scrapped_raw_data2.png"><br/>
 
-### Data Cleaning & Freq Table using `pandas`, `numpy`
+### Data Cleaning & Freq Table using `pandas`, `numpy`<br/>
 (Script: 003_import_clean_individual_listings.ipynb)
 
 - There are ~30 different housing type, grouped similar types

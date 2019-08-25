@@ -1,13 +1,12 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 
 import pandas as pd
 import numpy as np
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
 
 # Load data
 df = data = pd.read_csv("./data/seattle_individual_listing_details.csv",
@@ -26,122 +25,105 @@ df = data = pd.read_csv("./data/seattle_individual_listing_details.csv",
 # 'amenityAccess':str, 'amenityLogistics': str, 'amenityBB': str,
 # 'amenitySafety':str, 'amenityNotIn': str},
 
-
-layout = dict(
-    autosize=True,
-    automargin=True,
-    margin=dict(l=30, r=30, b=20, t=40),
-    hovermode="closest",
-    plot_bgcolor="#F9F9F9",
-    paper_bgcolor="#F9F9F9",
-    legend=dict(font=dict(size=10), orientation="h"),
-    title="Satellite Overview",
-    mapbox=dict(
-        # accesstoken=mapbox_access_token,
-        style="light",
-        center=dict(lon=-78.05, lat=42.54),
-        zoom=7,
-    ),
-)
 # Create app layout
 app.layout = html.Div(
     [
-        # empty Div to trigger javascript file for graph resizing
-        html.Div(id="output-clientside"),
-        html.Div(
-            [
-                html.Div(
-                    [
-                        html.Div(
-                            [
-                                html.H3(
-                                    "Airbnb Housing Listing Analysis",
-                                    style={"margin-bottom": "0px"},
-                                ),
-                                html.H5(
-                                    "Attribute Explore", style={"margin-top": "0px"}
-                                ),
-                            ]
-                        )
-                    ],
-                    className="one-half column",
-                    id="title",
+        dbc.Container([
+            dbc.Row([
+                html.H1(
+                    "Airbnb Housing Listing Analysis",
+                ),
+                ],
+                id="header",
+                justify="center",
+            ),
+
+            dbc.Row([
+                html.H5(
+                    "Attribute Explore",
                 ),
             ],
-            id="header",
-            className="row flex-display",
-            style={"margin-bottom": "25px"},
-        ),
-        html.Div(
+            justify="center",
+            style={"margin-bottom": "100px"},)
+        ], fluid=True),
+        dbc.Container(
             [
-                html.Div(
-                    [
-                        html.P(
-                            "Filter by listing price range:",
-                            className="control_label",
-                        ),
-                        dcc.RangeSlider(
-                            id="price_slider",
-                            min=0,
-                            max=250,
-                            value= [0, 250],
-                            step = 50,
-                            marks={
-                                250: {'label': '$0'},
-                                50: {'label': '$50'},
-                                100: {'label': '$100'},
-                                150: {'label': '$150'},
-                                200: {'label': '$200'},
-                                250: {'label': '$250'}
-                            },
-                            className="dcc_control",
-                        ),
+                dbc.Row([
+                    dbc.Col(
+                        [
+                            dbc.Card([
+                                dbc.CardBody([
+                                    html.H5(
+                                        "Filter by listing price range:",
+                                        className="control_label",
+                                    ),
+                                    dcc.RangeSlider(
+                                        id="price_slider",
+                                        min=0,
+                                        max=250,
+                                        value= [0, 250],
+                                        step = 50,
+                                        marks={
+                                            0: {'label': '$0'},
+                                            50: {'label': '$50'},
+                                            100: {'label': '$100'},
+                                            150: {'label': '$150'},
+                                            200: {'label': '$200'},
+                                            250: {'label': '$250'}
+                                        },
+                                        className="dcc_control",
+                                    ),
 
-                        html.P("Choose the housing attribute:", className="control_label"),
-                        dcc.Dropdown(
-                            id="attribute_dropdown",
-                            options=[
-                                {'label': 'Number of Beds', 'value': 'NBe'},
-                                {'label': 'Number of Baths', 'value': 'NBa'},
-                                {'label': 'Shared Baths', 'value': 'SB'},
-                                {'label': 'Number of Guests', 'value': 'NG'},
-                                {'label': 'Price', 'value': 'P'},
-                                {'label': 'Number of Reviews', 'value': 'NR'},
-                                {'label': 'Review Stars', 'value': 'RS'},
-                                {'label': 'House Type', 'value': 'HT'},
-                                {'label': 'Number of Reviews', 'value': 'NR'},
-                                {'label': 'Review Stars', 'value': 'RS'},
-                                {'label': 'House Type', 'value': 'HT'},
-                            ],
-                            className="dcc_control",
-                        ),
-                    ],
-                    className="pretty_container four columns",
-                    id="cross-filter-options",
+                                    html.Br(),
+                                    html.Br(),
+                                    html.Br(),
+                                    html.H5("Choose the housing attribute:", className="control_label"),
+                                    dbc.DropdownMenu(
+                                        [
+                                            dbc.DropdownMenuItem("House Type", id = '0'),
+                                            dbc.DropdownMenuItem("Number of Beds", id = '1'),
+                                            dbc.DropdownMenuItem("Number of Baths", id = '2'),
+                                            dbc.DropdownMenuItem("Shared Bath", id = '3'),
+                                            dbc.DropdownMenuItem("Number of Guests", id = '4'),
+                                            dbc.DropdownMenuItem(divider=True),
+                                            dbc.DropdownMenuItem("Number of Reviews", id = '5'),
+                                            dbc.DropdownMenuItem("Review Rating", id = '6'),
+                                            dbc.DropdownMenuItem(divider=True),
+                                            dbc.DropdownMenuItem("Price", id = '7'),
+                                        ],
+                                        label="Housing Feature",
+                                        color="success",
+                                    )
 
-                ),
-                html.Div(
-                    [
-                        html.Div(
-                            [
-                        html.Div(
-                            [dcc.Graph(id="count_graph")],
-                            id="countGraphContainer",
-                            className="pretty_container",
-                        ),
-                    ],
-                    id="right-column",
-                    className="eight columns",
-                ),
+                                ])
+                            ])
+                        ],
+                        id="cross-filter-options",
+                        width={"size": 3, "offset": 1},
+
+                    ),
+                    dbc.Col(
+                        [
+                            dbc.Card([
+                                dbc.CardBody([
+                                    html.Div(
+                                        [dcc.Graph(id="attribute_graph")],
+                                        id="attributeGraphContainer",
+                                        className="pretty_container",
+                                    ),
+                                ])
+                            ])
+
+                        ],
+                        id="right-column",
+                    ),
+                ])
             ],
-            className="row flex-display",
-
+            className="mt-4",
+            fluid=True
         ),
     ],
-    id="mainContainer",
-    style={"display": "flex", "flex-direction": "column"},
-),
-    ])
+    id="mainContainer")
 
 if __name__ == '__main__':
     app.run_server(debug=True)

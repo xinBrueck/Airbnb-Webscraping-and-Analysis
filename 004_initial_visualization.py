@@ -10,9 +10,48 @@ import numpy as np
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
 
+# define column types
+colTypes = {
+'amendities' :str,
+'availableDts' :str,
+'id' : str,
+'listingHouseType' :str,
+'listingLoc' :str,
+'listingNm' : str,
+'neighborhoodSummary' :str,
+'numBaths' :  str,
+'numBedrooms' : str,
+'numBeds' :  np.float64,
+'numGuests' : str,
+'price' :     str,
+'reviewStar' : np.float64,
+'reviewTotal' :np.float64,
+'listingHouseTypeGroup': str,
+'numBathNew' : np.float64,
+'sharedBath' : np.float64,
+'numGuestsNew' :   np.float64,
+'priceNew' : np.float64,
+'availableDtsAug' :np.float64,
+'availableDtsSep' :np.float64,
+'availableDtsOct' :np.float64,
+'amenityString' :   str,
+'amenityBasic' :str,
+'amenityFamily' :   str,
+'amenityFacilities' :  str,
+'amenityDining' :   str,
+'amenityAccess' :   str,
+'amenityLogistics' :str,
+'amenityBB' : str,
+'amenitySafety' :   str,
+'amenityNotIn' :str,
+'totalAvailableDts' : np.float64
+}
 # Load data
 dt = pd.read_csv("./data/seattle_individual_listing_details_cleaned.csv", sep='|', quotechar= '"',
-encoding= 'utf8', index_col=0)
+encoding= 'utf8', index_col=0, dtype = colTypes)
+
+##set the type for each attributes
+
 
 ##define glable varialbles
 
@@ -132,7 +171,7 @@ app.layout = html.Div(
                             ])
                         ],
                         id="cross-filter-options",
-                        width={"size": 3, "offset": 1},
+                        width={"size": 2, "offset": 1},
 
                     ),
                     dbc.Col(
@@ -166,25 +205,20 @@ app.layout = html.Div(
      Input('drop-down-z', 'value')])
 
 def update_figure(feature_x, feature_y, feature_z):
-    types=dt[COLNAME_DIST[feature_z]].unique()
-    data=[]
 
-    for type in types:
-        dt_type=dt[dt[COLNAME_DIST[feature_z]]==type]
-
-        data.append(
-            go.Scatter(
-                x=dt_type[COLNAME_DIST[feature_x]],
-                y=dt_type[COLNAME_DIST[feature_y]],
-                mode='markers',
-                marker={
-                    'size': 10,
-                    'color' : 'rgba(255, 182, 193, .9)',
-                    'line': {'width': 2, 'color': 'rgba(152, 0, 0, .8)'}
-                },
-                name=feature_z+" "+str(type)
-            )
-        )
+    data = [go.Scatter(
+        x=dt[dt[COLNAME_DIST[feature_z]]==type][COLNAME_DIST[feature_x]],
+        y=dt[dt[COLNAME_DIST[feature_z]]==type][COLNAME_DIST[feature_y]],
+        text=type,
+        mode='markers',
+        opacity=0.8,
+        marker={
+            'size': 10,
+            'line': {'width': 2, 'color': 'rgba(152, 0, 0, .8)'}
+        },
+        name=str(type)
+    ) for type in dt[COLNAME_DIST[feature_z]].unique()
+    ]
 
 
     # scatters = go.Scatter(
@@ -216,6 +250,7 @@ def update_figure(feature_x, feature_y, feature_z):
             x=average_by_group[COLNAME_DIST[feature_x]],
             y=average_by_group[COLNAME_DIST[feature_y]],
             mode='lines',
+            showlegend = False,
         )
 
         layout = go.Layout(
@@ -231,7 +266,7 @@ def update_figure(feature_x, feature_y, feature_z):
             hovermode='closest'
         )
 
-        data = data.append(lineOfBestFit)
+        data.append(lineOfBestFit)
 
 
 
